@@ -1,0 +1,85 @@
+<div class="container body-content">
+  <div class="row">
+    <h4 style="text-align:center">Invoice Generator</h4>
+    </div>
+    <hr />
+    <form #form = "ngForm">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#Item</th>
+        <th class="col-md-4">Name</th>
+        <th style="width: 11%">Quantity</th>
+        <th style="width: 12.5%">Category</th>
+        <th style="width: 13%">Price (₹)</th>
+        <th class="col-md-1">Tax Rate</th>
+        <th>Total Price</th>
+        <th><i (click)="addItem()" class="glyphicon glyphicon-plus"></i></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of invoice; let i=index">
+        <th>{{i+1}}</th>
+        <td>
+          <div class="form-group"
+          [class.has-error]="iname.invalid && iname.touched"
+          [class.has-success]="iname.valid && iname.touched"
+          [class.has-feedback]="(iname.invalid && iname.touched) || (iname.valid && iname.touched)">
+            <input #iname="ngModel" required name="itemName_{{i}}"  type="text" class="form-control" [ngModel]="item.name"
+            (ngModelChange)="changeName(i, $event)" (blur)="changeName(i, iname.value)" >
+            <span *ngIf="iname.invalid && iname.touched" class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <span *ngIf="iname.valid && iname.touched" class="glyphicon glyphicon-ok form-control-feedback"></span>
+          </div>
+        </td>
+        <td>
+          <div class="form-group"
+          [class.has-error]="iquantity.invalid && iquantity.touched"
+          [class.has-success]="iquantity.valid && iquantity.touched"
+          [class.has-feedback]="(iquantity.invalid && iquantity.touched) || (iquantity.valid && iquantity.touched)">
+          <input #iquantity="ngModel" style="text-align: right" required min="1" max="9999" name="itemQuantity_{{i}}" type="number" class="form-control" [ngModel]="item.quantity"
+          (ngModelChange)="changeQuantity(i, $event)" (blur)="changeQuantity(i, iquantity.value)">
+          <span *ngIf="iquantity.invalid && iquantity.touched" class="glyphicon glyphicon-remove form-control-feedback"></span>
+          <span *ngIf="iquantity.valid && iquantity.touched" class="glyphicon glyphicon-ok form-control-feedback"></span>
+        </div>
+        </td>
+        <td>
+          <div class="form-group"
+          [ngClass]="{'has-error': item.category == undefined, 'has-success': item.category != undefined}">
+          <select #icategory="ngModel" name="itemCategory_{{i}}" class="form-control"[ngModel]="item.category"
+          (ngModelChange)="changeCategory(i, $event)" (blur)="changeCategory(i, icategory.value)">
+          <option [ngValue]="null || undefined" selected >Select</option>
+          <option value="Medical">Medical</option>
+          <option value="NonMedical">Non-Medical</option>
+        </select>
+      </div>
+      </td>
+        <td>
+          <div class="form-group"
+          [class.has-error]="iprice.invalid && iprice.touched"
+          [class.has-success]="iprice.valid && iprice.touched"
+          [class.has-feedback]="(iprice.invalid && iprice.touched) || (iprice.valid && iprice.touched)">
+          <input #iprice="ngModel" style="text-align: right" min="1" required name="itemPrice_{{i}}" type="number" class="form-control"
+          [ngModel]="item.price"
+          (ngModelChange)="changePrice(i, $event)" (blur)="changePrice(i, iprice.value)">
+          <span *ngIf="iprice.invalid && iprice.touched" class="glyphicon glyphicon-remove form-control-feedback"></span>
+          <span *ngIf="iprice.valid && iprice.touched" class="glyphicon glyphicon-ok form-control-feedback"></span>
+        </div>
+        </td>
+        <td>
+          <input #itax style="text-align: right" name="itemTaxRate_{{i}}" type="text" class="form-control" disabled="disabled"
+          [ngModel]="item.taxRate | percent">
+        </td>
+        <td><input #itotalprice style="text-align: right" name="itemTotalPrice_{{i}}" type="text" class="form-control" disabled="disabled"
+          [ngModel]="item.totalPrice | currency:'INR'"></td>
+        <td><i (click)="removeItem(i)" class="glyphicon glyphicon-minus"></i></td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+  <div class="row">
+    <div class="pull-right">
+      <h4>Total - {{finalTotal | currency : 'INR'}}</h4>
+    </div>
+  </div>
+</form>
+</div>
