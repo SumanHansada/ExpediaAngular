@@ -8,7 +8,7 @@
     <thead>
       <tr>
         <th>#Item</th>
-        <th class="col-md-4">Name</th>
+        <th class="col-md-3">Name</th>
         <th style="width: 11%">Quantity</th>
         <th style="width: 12.5%">Category</th>
         <th style="width: 13%">Price (₹)</th>
@@ -44,7 +44,7 @@
         </td>
         <td>
           <div class="form-group"
-          [ngClass]="{'has-error': item.category == undefined, 'has-success': item.category != undefined}">
+          [ngClass]="{'has-error': item.category == undefined && icategory.touched, 'has-success': item.category != undefined}">
           <select #icategory="ngModel" name="itemCategory_{{i}}" class="form-control"[ngModel]="item.category"
           (ngModelChange)="changeCategory(i, $event)" (blur)="changeCategory(i, icategory.value)">
           <option [ngValue]="null || undefined" selected >Select</option>
@@ -78,7 +78,8 @@
   <hr>
   <div class="row">
     <div class="pull-right">
-      <h4>Total - {{finalTotal | currency : 'INR'}}</h4>
+        <h4>Sales Tax - {{taxTotal | currency : 'INR'}} |
+      Total - {{finalTotal | currency : 'INR'}}</h4>
     </div>
   </div>
 </form>
